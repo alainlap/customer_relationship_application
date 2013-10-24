@@ -122,7 +122,8 @@ class CRM
     clear
     
     loop_contacts { |contact|
-      puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+      # puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+      contact.print
     }
     pause
   end

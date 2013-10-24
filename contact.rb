@@ -8,4 +8,8 @@ class Contact
     @email = email
     @note = note
   end
+
+  def print
+    puts "[#{@id-999}] #{@first_name} #{@last_name}"
+  end
 end
