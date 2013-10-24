@@ -108,6 +108,15 @@ class CRM
   end
 
   def delete_contact
+    clear
+    
+    loop_contacts { |contact|
+      puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+    }
+
+    puts "Enter ID number corresponding to the contact you wish to delete"
+    deleted_id = gets.chomp.to_i+999
+    Rolodex.delete(deleted_id)
   end
 
   def display_all_contacts
@@ -136,10 +145,10 @@ class CRM
   end
 
   def pause
-    p "Press ENTER to continue"
+    p "Hit ENTER to continue to main menu"
     continue = nil
     until continue == "\n"
-     continue = gets 
+     continue = gets
     end
   end
 

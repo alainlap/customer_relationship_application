@@ -22,4 +22,12 @@ class Rolodex
     }
     @requested_contact
   end
+
+  def self.delete deleted_id
+    @contacts.each_with_index {|contact, index|
+      if contact.id == deleted_id
+        @contacts.delete_at(index)
+      end
+    }
+  end
 end
