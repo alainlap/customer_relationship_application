@@ -81,7 +81,7 @@ class CRM
     puts "[4] Note" 
     puts "[5] Cancel (back to main menu)"
     puts "Enter a number: "
-    temp_input = gets
+    temp_input = gets.to_i
 
     case temp_input
       when 1
@@ -96,7 +96,14 @@ class CRM
         exit
     end
 
-    modify_contact.modify_unit unit
+    clear
+
+    puts "Input new attribute:"
+    new_unit = gets.chomp.to_s
+
+    modify_contact.modify_unit(unit, new_unit)
+
+    puts "Success!"
     pause
   end
 
