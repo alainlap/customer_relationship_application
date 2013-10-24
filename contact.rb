@@ -8,4 +8,9 @@ class Contact
     @email = email
     @note = note
   end
+
+  def modify_unit unit
+    puts "success!"
+    puts unit
+  end
 end

@@ -13,4 +13,13 @@ class Rolodex
   def self.contacts
     @contacts
   end
+
+  def self.find_by_id requested_id
+    @contacts.each {|contact|
+      if contact.id == requested_id
+        @requested_contact = contact
+      end
+    }
+    @requested_contact
+  end
 end

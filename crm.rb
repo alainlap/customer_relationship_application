@@ -2,9 +2,11 @@ require "debugger"
 
 require_relative "contact"
 require_relative "rolodex"
+require_relative "tools"
 
 class CRM
 
+  include Tools
   attr_reader :user_selected
 
   def initialize(name)
@@ -12,7 +14,7 @@ class CRM
   end
 
   def print_main_menu
-    puts "\e[H\e[2J"
+    clear
     puts "[1] Add a new contact"
     puts "[2] Modify an existing contact"
     puts "[3] Delete a contact"
@@ -60,20 +62,65 @@ class CRM
   end
 
   def modify_existing_contact
+    clear
+    
+    loop_contacts { |contact|
+      puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+    }
+    puts "Enter ID number corresponding to the contact you wish to modify"
+    temp_input = gets
+    modify_contact = Rolodex.find_by_id(temp_input.to_i+999)
+    
+    clear
+
+    puts "You selected: #{modify_contact.first_name} #{modify_contact.last_name}"
+    puts "What attribute would you like to modify?"
+    puts "[1] First Name"
+    puts "[2] Last Name"
+    puts "[3] Email"
+    puts "[4] Note" 
+    puts "[5] Cancel (back to main menu)"
+    puts "Enter a number: "
+    temp_input = gets
+
+    case temp_input
+      when 1
+        unit = "first_name"
+      when 2
+        unit = "last_name"
+      when 3
+        unit = "email"
+      when 4
+        unit = "note"
+      when 5
+        exit
+    end
+
+    modify_contact.modify_unit unit
+    pause
   end
 
   def delete_contact
   end
 
   def display_all_contacts
-  puts "\e[H\e[2J"
-  contacts = Rolodex.contacts
-  counter = 1
-  contacts.each {|contact|
-    p "[#{counter}] #{contact.first_name} #{contact.last_name}"
-    counter += 1
-  }
-  pause
+    clear
+    
+    loop_contacts { |contact|
+      p "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+    }
+    pause
+  end
+
+  def loop_contacts
+    contacts = Rolodex.contacts
+    
+    contacts.each {|contact|
+      yield(contact)
+    } 
+  end
+
+  def display_attribute
   end
 
   def exit_app
@@ -87,6 +134,10 @@ class CRM
     until continue == "\n"
      continue = gets 
     end
+  end
+
+  def clear
+    puts "\e[H\e[2J"
   end
 
 end
