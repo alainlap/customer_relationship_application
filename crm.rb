@@ -72,8 +72,8 @@ class CRM
     modify_contact = Rolodex.find_by_id(temp_input.to_i+999)
     
     clear
-
     puts "You selected: #{modify_contact.first_name} #{modify_contact.last_name}"
+    puts ""
     puts "What attribute would you like to modify?"
     puts "[1] First Name"
     puts "[2] Last Name"
@@ -85,23 +85,22 @@ class CRM
 
     case temp_input
       when 1
-        unit = "first_name"
+        unit = :first_name
       when 2
-        unit = "last_name"
+        unit = :last_name
       when 3
-        unit = "email"
+        unit = :email
       when 4
-        unit = "note"
+        unit = :note
       when 5
         exit
     end
 
     clear
-
     puts "Input new attribute:"
     new_unit = gets.chomp.to_s
 
-    modify_contact.modify_unit(unit, new_unit)
+    modify_contact.send("#{unit}=", new_unit)
 
     puts "Success!"
     pause
@@ -123,7 +122,7 @@ class CRM
     clear
     
     loop_contacts { |contact|
-      p "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+      puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
     }
     pause
   end
@@ -145,7 +144,7 @@ class CRM
   end
 
   def pause
-    p "Hit ENTER to continue to main menu"
+    puts "Hit ENTER to continue to main menu"
     continue = nil
     until continue == "\n"
      continue = gets
@@ -158,9 +157,39 @@ class CRM
 
 end
 
+
 crm_app = CRM.new("My First CRM")
+
+# Input dummy contact data
+def prime  
+  first_name = ["James", "Mark", "Angela", "Theodore", "Sarah"]
+  last_name = ["Bond", "Sheffield", "La Roche", "Michaels", "Robertson"]
+  email = ["jamesbond@mi6.gov.uk", "mshef@gmail.com", "angie@hotmail.com", "theo23@yahoo.com", "srobertson@aol.com"]
+  note = ["This guys is badass!", "He's ok.", "Super annoying", "Great customer!", "Not much to say"]
+
+  first_name.each_index do |i|
+    contact = Contact.new(first_name[i], last_name[i], email[i], note[i])
+    Rolodex.add_contact(contact)
+    Rolodex.contacts  
+  end
+end
+# End prime
+prime
 crm_app.main_menu
 
 while crm_app.user_selected != 6
   crm_app.main_menu
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
