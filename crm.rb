@@ -1,3 +1,4 @@
+
 require "debugger"
 
 require_relative "contact"
@@ -15,13 +16,19 @@ class CRM
 
   def print_main_menu
     clear
-    puts "[1] Add a new contact"
-    puts "[2] Modify an existing contact"
-    puts "[3] Delete a contact"
-    puts "[4] Display all the contacts"
+    puts "MAIN MENU"
+    puts ""
+    puts "[1] Add new contact"
+    puts "[2] Modify existing contact"
+    puts "[3] Delete contact"
+    puts "[4] Display contacts"
     puts "[5] Display an attribute" 
     puts "[6] Exit"
+    puts ""
+    line
     puts "Enter a number: "
+    line
+    
   end
 
   def main_menu
@@ -120,11 +127,25 @@ class CRM
 
   def display_all_contacts
     clear
-    
+    puts "DISPLAY ALL CONTACT"
+    puts ""
+
     loop_contacts { |contact|
       # puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
       contact.print
     }
+
+    line
+    puts "Which contact do you wish to view?"
+    line
+    temp_input = gets.chomp.to_i+999
+
+    display_contact = Rolodex.find_by_id(temp_input)
+
+    clear
+
+    display_contact.print_details
+
     pause
   end
 
@@ -145,7 +166,10 @@ class CRM
   end
 
   def pause
+    puts ""
+    line
     puts "Hit ENTER to continue to main menu"
+    line
     continue = nil
     until continue == "\n"
      continue = gets
