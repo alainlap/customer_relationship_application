@@ -20,8 +20,8 @@ class Contact
   def print_details
 
     puts "CONTACT DETAILS"
-    line
-    puts "ID No. \t#{@id-999}"
+    puts ""
+    puts "ID No. \t\t#{@id-999}"
     puts "First Name: \t#{@first_name}"
     puts "Last Name: \t#{@last_name}"
     puts "Email: \t\t#{email}"

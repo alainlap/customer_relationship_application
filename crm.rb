@@ -1,6 +1,3 @@
-
-require "debugger"
-
 require_relative "contact"
 require_relative "rolodex"
 require_relative "tools"
@@ -9,10 +6,6 @@ class CRM
 
   include Tools
   attr_reader :user_selected
-
-  def initialize(name)
-    @name = name
-  end
 
   def print_main_menu
     clear
@@ -26,7 +19,7 @@ class CRM
     puts "[6] Exit"
     puts ""
     line
-    puts "Enter a number: "
+    puts "Where would you like to go?"
     line
     
   end
@@ -70,13 +63,18 @@ class CRM
 
   def modify_existing_contact
     clear
-    
+    puts "MODIFY EXISTING CONTACT"
+    puts ""
     loop_contacts { |contact|
       puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
     }
-    puts "Enter ID number corresponding to the contact you wish to modify"
-    temp_input = gets
-    modify_contact = Rolodex.find_by_id(temp_input.to_i+999)
+    puts ""
+    line
+    puts "Which contact do you want to modify?"
+    line
+
+    input = gets.chomp.to_i+999
+    modify_contact = Rolodex.find_by_id(input)
     
     clear
     puts "You selected: #{modify_contact.first_name} #{modify_contact.last_name}"
@@ -88,9 +86,9 @@ class CRM
     puts "[4] Note" 
     puts "[5] Cancel (back to main menu)"
     puts "Enter a number: "
-    temp_input = gets.to_i
+    input = gets.to_i
 
-    case temp_input
+    case input
       when 1
         unit = :first_name
       when 2
@@ -115,13 +113,22 @@ class CRM
 
   def delete_contact
     clear
-    
+    puts "DELETE CONTACT"
+    puts ""
+
     loop_contacts { |contact|
       puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
     }
 
-    puts "Enter ID number corresponding to the contact you wish to delete"
+    puts ""
+    line
+    puts "Which contact do you want to delete?"
+    line
+
     deleted_id = gets.chomp.to_i+999
+
+    confirm "delete contact"
+
     Rolodex.delete(deleted_id)
   end
 
@@ -137,16 +144,22 @@ class CRM
 
     line
     puts "Which contact do you wish to view?"
+    puts "or, press ENTER to return to menu"
     line
-    temp_input = gets.chomp.to_i+999
+    
+    input = gets
+    if input == "\n"
+    else
+      input = input.chomp.to_i+999
 
-    display_contact = Rolodex.find_by_id(temp_input)
+      display_contact = Rolodex.find_by_id(input)
 
-    clear
+      clear
 
-    display_contact.print_details
+      display_contact.print_details
 
-    pause
+      pause
+    end
   end
 
   def loop_contacts
@@ -180,10 +193,34 @@ class CRM
     puts "\e[H\e[2J"
   end
 
+  def confirm do_what
+    clear
+    line
+    puts ("Are you sure you want to " + do_what)
+    puts "Y/N"
+    line
+
+    input = gets.chomp.downcase
+    if input[0] == "y"
+      
+    elsif input[0] == "n"
+      restart
+    else
+      puts "I don't understand. Please type 'Y' or 'N':"
+      confirm do_what
+    end
+  end
+
+  def restart
+    while @user_selected != 6
+      main_menu
+    end
+  end
+
 end
 
 
-crm_app = CRM.new("My First CRM")
+crm_app = CRM.new
 
 # Input dummy contact data
 def prime  
@@ -201,11 +238,10 @@ end
 # End prime
 prime
 crm_app.main_menu
+crm_app.restart
 
-while crm_app.user_selected != 6
-  crm_app.main_menu
-end
 
+restart
 
 
 
