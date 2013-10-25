@@ -13,7 +13,7 @@ class CRM
     end
   end
 
-  def print_main_menu
+  def main_menu
     clear
     puts "MAIN MENU"
     puts ""
@@ -21,21 +21,30 @@ class CRM
     puts "[2] Modify existing contact"
     puts "[3] Delete contact"
     puts "[4] Display contacts"
-    puts "[5] Display an attribute" 
-    puts "[6] Exit"
+    puts "[5] Exit"
     puts ""
-    line
-    puts "Where would you like to go?"
-    line
+
+    main_menu_selection(get_input("Where would you like to go", "integer"))
   end
 
-  def main_menu
-    print_main_menu
-    menu_selection = gets.chomp.to_i
-    call_option(menu_selection)
+  def get_input message, input_type
+    user_input = nil
+    line
+    puts message
+    user_input = gets.chomp
+
+    if user_input == "quit"
+      exit_app
+    end
+
+    if input_type == "integer"
+      return user_input = user_input.to_i
+    end
+
+    return user_input
   end
 
-  def call_option menu_selection
+  def main_menu_selection menu_selection
     
     case menu_selection
     when 1
@@ -47,8 +56,6 @@ class CRM
     when 4
       display_all_contacts
     when 5
-      display_attribute
-    when 6
       exit_app
     end
   end
@@ -61,20 +68,27 @@ class CRM
   end
 
   def new_contact_info
-    # print "Enter First Name: "
-    # first_name = gets.chomp.downcase
-    # print "Enter Last Name: "
-    # last_name = gets.chomp.downcase
-    # print "Enter Email Address: "
-    # email = gets.chomp.downcase
-    # print "Enter a Note: "
-    # note = gets.chomp.downcase
+    clear
+    puts "ADD NEW CONTACT"
+    puts ""
+    line
+    puts "Enter First Name: "
+    @first_name = gets.chomp.downcase
+    line
+    puts "Enter Last Name: "
+    @last_name = gets.chomp.downcase
+    line
+    puts "Enter Email Address: "
+    @email = gets.chomp.downcase
+    line
+    puts "Enter a Note: "
+    @note = gets.chomp.downcase
     
     # FOR TESTING
-    @first_name = "James"
-    @last_name = "Bond"
-    @email = "jamesbond@mi6.gov.uk"
-    @note = "This guys is badass!"
+    # @first_name = "James"
+    # @last_name = "Bond"
+    # @email = "jamesbond@mi6.gov.uk"
+    # @note = "This guys is badass!"
   end
 
   def modify_existing_contact
@@ -227,7 +241,6 @@ class CRM
     end
   end
 end
-
 
 crm_app = CRM.new
 
