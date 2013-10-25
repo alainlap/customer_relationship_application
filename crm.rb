@@ -23,7 +23,6 @@ class CRM
     puts "[4] Display contacts"
     puts "[5] Exit"
     puts ""
-
     main_menu_selection(get_input("Where would you like to go", "integer"))
   end
 
@@ -32,20 +31,16 @@ class CRM
     line
     puts message
     user_input = gets.chomp
-
     if user_input == "quit"
       exit_app
     end
-
     if input_type == "integer"
       return user_input = user_input.to_i
     end
-
     return user_input
   end
 
   def main_menu_selection menu_selection
-    
     case menu_selection
     when 1
       add_new_contact
@@ -71,24 +66,10 @@ class CRM
     clear
     puts "ADD NEW CONTACT"
     puts ""
-    line
-    puts "Enter First Name: "
-    @first_name = gets.chomp.downcase
-    line
-    puts "Enter Last Name: "
-    @last_name = gets.chomp.downcase
-    line
-    puts "Enter Email Address: "
-    @email = gets.chomp.downcase
-    line
-    puts "Enter a Note: "
-    @note = gets.chomp.downcase
-    
-    # FOR TESTING
-    # @first_name = "James"
-    # @last_name = "Bond"
-    # @email = "jamesbond@mi6.gov.uk"
-    # @note = "This guys is badass!"
+    @first_name = get_input("Enter First Name:", "string")
+    @last_name = get_input("Enter Last Name:", "string")
+    @email = get_input("Enter Email:", "string")
+    @note = get_input("Enter Note:", "string")
   end
 
   def modify_existing_contact
