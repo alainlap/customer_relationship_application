@@ -5,7 +5,13 @@ require_relative "tools"
 class CRM
 
   include Tools
-  attr_reader :user_selected
+  attr_reader :menu_selection
+
+  def start
+    while @menu_selection != 6
+      main_menu
+    end
+  end
 
   def print_main_menu
     clear
@@ -21,25 +27,40 @@ class CRM
     line
     puts "Where would you like to go?"
     line
-    
   end
 
   def main_menu
     print_main_menu
-    user_selected = gets.chomp.to_i
-    call_option(user_selected)
+    menu_selection = gets.chomp.to_i
+    call_option(menu_selection)
   end
 
-  def call_option user_selected
-    add_new_contact if user_selected == 1
-    modify_existing_contact if user_selected == 2
-    delete_contact if user_selected == 3
-    display_all_contacts if user_selected == 4
-    display_attribute if user_selected == 5
-    exit_app if user_selected == 6
+  def call_option menu_selection
+    
+    case menu_selection
+    when 1
+      add_new_contact
+    when 2
+      modify_existing_contact
+    when 3
+      delete_contact
+    when 4
+      display_all_contacts
+    when 5
+      display_attribute
+    when 6
+      exit_app
+    end
   end
 
   def add_new_contact
+    new_contact_info
+    contact = Contact.new(@first_name, @last_name, @email, @note)
+    Rolodex.add_contact(contact)
+    Rolodex.contacts
+  end
+
+  def new_contact_info
     # print "Enter First Name: "
     # first_name = gets.chomp.downcase
     # print "Enter Last Name: "
@@ -49,16 +70,11 @@ class CRM
     # print "Enter a Note: "
     # note = gets.chomp.downcase
     
-    # TEST-------
-    first_name = "James"
-    last_name = "Bond"
-    email = "jamesbond@mi6.gov.uk"
-    note = "This guys is badass!"
-    # /TEST-------
-
-    contact = Contact.new(first_name, last_name, email, note)
-    Rolodex.add_contact(contact)
-    Rolodex.contacts
+    # FOR TESTING
+    @first_name = "James"
+    @last_name = "Bond"
+    @email = "jamesbond@mi6.gov.uk"
+    @note = "This guys is badass!"
   end
 
   def modify_existing_contact
@@ -204,19 +220,12 @@ class CRM
     if input[0] == "y"
       
     elsif input[0] == "n"
-      restart
+      start
     else
       puts "I don't understand. Please type 'Y' or 'N':"
       confirm do_what
     end
   end
-
-  def restart
-    while @user_selected != 6
-      main_menu
-    end
-  end
-
 end
 
 
@@ -237,11 +246,10 @@ def prime
 end
 # End prime
 prime
-crm_app.main_menu
-crm_app.restart
+crm_app.start
 
 
-restart
+start
 
 
 
