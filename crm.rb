@@ -29,7 +29,7 @@ class CRM
   def get_input message, input_type
     user_input = nil
     line
-    puts message
+    print message
     user_input = gets.chomp
     if user_input == "quit"
       exit_app
@@ -85,7 +85,7 @@ class CRM
     line
 
     input = gets.chomp.to_i+999
-    modify_contact = Rolodex.find_by_id(input)
+    modify_contact = Rolodex.find(input)
     
     clear
     puts "You selected: #{modify_contact.first_name} #{modify_contact.last_name}"
@@ -99,20 +99,22 @@ class CRM
     puts "Enter a number: "
     input = gets.to_i
 
-    case input
-      when 1
-        unit = :first_name
-      when 2
-        unit = :last_name
-      when 3
-        unit = :email
-      when 4
-        unit = :note
-      when 5
-        exit
-    end
+    if input.is_a? == Symbol
+        
+      case input
+        when 1
+          unit = :first_name
+        when 2
+          unit = :last_name
+        when 3
+          unit = :email
+        when 4
+          unit = :note
+        when 5
+          exit
+      end
 
-    clear
+      clear
     puts "Input new attribute:"
     new_unit = gets.chomp.to_s
 
@@ -120,6 +122,12 @@ class CRM
 
     puts "Success!"
     pause
+
+    else  
+
+      puts "WHAT DO I DO?"
+
+    end
   end
 
   def delete_contact
@@ -148,10 +156,12 @@ class CRM
     puts "DISPLAY ALL CONTACT"
     puts ""
 
-    loop_contacts { |contact|
-      # puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
-      contact.print
-    }
+    # loop_contacts { |contact|
+    #   # puts "[#{contact.id-999}] #{contact.first_name} #{contact.last_name}"
+    #   contact.print
+    # }
+
+    Rolodex.print_contacts
 
     line
     puts "Which contact do you wish to view?"
@@ -163,7 +173,7 @@ class CRM
     else
       input = input.chomp.to_i+999
 
-      display_contact = Rolodex.find_by_id(input)
+      display_contact = Rolodex.find(input)
 
       clear
 
@@ -225,21 +235,22 @@ end
 
 crm_app = CRM.new
 
-# Input dummy contact data
-def prime  
-  first_name = ["James", "Mark", "Angela", "Theodore", "Sarah"]
-  last_name = ["Bond", "Sheffield", "La Roche", "Michaels", "Robertson"]
-  email = ["jamesbond@mi6.gov.uk", "mshef@gmail.com", "angie@hotmail.com", "theo23@yahoo.com", "srobertson@aol.com"]
-  note = ["This guys is badass!", "He's ok.", "Super annoying", "Great customer!", "Not much to say"]
+# CREATE DUMMY CONTACTS
+   def prime  
+     first_name = ["James", "Mark", "Angela", "Theodore", "Sarah", "Burt"]
+     last_name = ["Bond", "Sheffield", "La Roche", "Michaels", "Robertson", "Wonderful"]
+     email = ["jamesbond@mi6.gov.uk", "mshef@gmail.com", "angie@hotmail.com", "theo23@yahoo.com", "srobertson@aol.com", "wonderful@earthlink.com"]
+     note = ["This guys is badass!", "He's ok.", "Super annoying", "Great customer!", "Not much to say", "great moustache"]
 
-  first_name.each_index do |i|
-    contact = Contact.new(first_name[i], last_name[i], email[i], note[i])
-    Rolodex.add_contact(contact)
-    Rolodex.contacts  
-  end
-end
-# End prime
-prime
+     first_name.each_index do |i|
+       contact = Contact.new(first_name[i], last_name[i], email[i], note[i])
+       Rolodex.add_contact(contact)
+       Rolodex.contacts  
+     end
+   end
+   prime
+
+
 crm_app.start
 
 

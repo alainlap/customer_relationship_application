@@ -14,20 +14,33 @@ class Rolodex
     @contacts
   end
 
-  def self.find_by_id requested_id
-    @contacts.each {|contact|
-      if contact.id == requested_id
-        @requested_contact = contact
+  def self.find(id, return_index=false)
+    @contacts.each_with_index { |contact, index|
+    	if (contact.id == id) && (return_index == false)
+      		return contact
+      elsif (contact.id == id) && (return_index == true)
+      		return index
+      else
+      	# do nothing
       end
     }
-    @requested_contact
   end
 
-  def self.delete deleted_id
-    @contacts.each_with_index {|contact, index|
-      if contact.id == deleted_id
-        @contacts.delete_at(index)
-      end
-    }
+  def self.delete(index)
+    @contacts.delete_at(index)
   end
+
+  def self.all_contact_details
+  	details = []
+    @contacts.each do |contact|
+		details << "#{contact.first_name} #{contact.last_name}"
+	end
+	details
+  end
+
+
 end
+
+
+
+

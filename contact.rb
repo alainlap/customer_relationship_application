@@ -1,8 +1,4 @@
-require_relative 'tools'
-
 class Contact
-  
-  include Tools
 
   attr_accessor :id, :first_name, :last_name, :email, :note
 
@@ -18,7 +14,6 @@ class Contact
   end
 
   def print_details
-
     puts "CONTACT DETAILS"
     puts ""
     puts "ID No. \t\t#{@id-999}"
